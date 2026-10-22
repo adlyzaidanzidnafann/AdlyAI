@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b18">
+<meta name="description" content="AdlyAI by Adly — Content Studio untuk ide konten, hook, caption, dan hashtag.">
+<title>AdlyAI — by Adly</title>
+
+<style>
+:root {
+  --bg:#0b0b18;
+  --panel:#131326;
+  --panel2:#1b1b35;
+  --border:#2c2b49;
+  --text:#f7f6ff;
+  --muted:#a5a3c1;
+  --purple:#9565ff;
+  --pink:#f05ad7;
+  --green:#52e5b0;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,#29204b 0%,transparent 45%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  line-height:1.6;
+}
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+button:focus-visible,input:focus-visible,select:focus-visible,
+textarea:focus-visible { outline:2px solid var(--purple); outline-offset:3px; }
+
+.container { max-width:1160px; margin:auto; padding:22px; }
+
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:14px; padding:8px 0 22px;
+  border-bottom:1px solid var(--border);
+}
+.brand { display:flex; align-items:center; gap:11px; }
+.logo {
+  width:46px; height:46px; display:grid; place-items:center;
+  border-radius:15px; font-size:26px; font-weight:900;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  box-shadow:0 5px 28px #9565ff35;
+}
+.brand-name { font-size:22px; font-weight:850; letter-spacing:-.7px; }
+.gradient {
+  color:var(--purple);
+  background:linear-gradient(90deg,#a78bfa,#f472d0);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.byline { font-size:11px; color:var(--muted); margin-top:-4px; }
+.header-tag {
+  border:1px solid var(--border); border-radius:30px;
+  padding:7px 12px; color:#d5c4ff; font-size:11px;
+}
+
+.hero { text-align:center; padding:48px 0 34px; }
+.eyebrow {
+  display:inline-block; border:1px solid #7653bb65;
+  background:#9565ff16; color:#c9b4ff;
+  border-radius:30px; padding:6px 13px;
+  font-size:11px; letter-spacing:1px; font-weight:750;
+}
+h1 {
+  font-size:clamp(34px,5.4vw,59px);
+  letter-spacing:-2px; line-height:1.12; margin:19px 0 14px;
+}
+.hero p {
+  color:var(--muted); max-width:580px; margin:auto;
+  font-size:14px;
+}
+.features {
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:9px; margin-top:23px;
+}
+.feature {
+  padding:7px 11px; background:#ffffff07;
+  border:1px solid var(--border); border-radius:9px;
+  font-size:11px; color:#d5d1ef;
+}
+
+.layout {
+  display:grid; grid-template-columns:335px minmax(0,1fr);
+  gap:20px; align-items:start;
+}
+.card {
+  background:linear-gradient(150deg,#17172d,#111121);
+  border:1px solid var(--border);
+  border-radius:19px; padding:22px; min-width:0;
+}
+.card-title { font-size:17px; margin:0 0 4px; }
+.sub { color:var(--muted); font-size:12px; margin:0 0 21px; }
+
+.field { margin-bottom:16px; }
+label {
+  display:block; font-size:12px; font-weight:700;
+  margin-bottom:7px; color:#e7e3fa;
+}
+input,select,textarea {
+  width:100%; padding:12px;
+  border:1px solid var(--border); border-radius:10px;
+  background:#0d0d1d; color:var(--text);
+}
+input::placeholder,textarea::placeholder { color:#777591; }
+textarea { min-height:75px; resize:vertical; }
+select option { background:#151529; }
+
+.btn {
+  display:inline-flex; justify-content:center; align-items:center;
+  gap:8px; border:1px solid transparent;
+  border-radius:10px; padding:11px 14px;
+  font-weight:750; font-size:12px;
+  transition:filter .2s,transform .2s;
+}
+.btn:hover { filter:brightness(1.12); transform:translateY(-1px); }
+.btn:disabled { opacity:.6; cursor:wait; transform:none; }
+.primary {
+  width:100%; color:white;
+  background:linear-gradient(100deg,#8055ed,#c34ed8);
+  box-shadow:0 7px 25px #9565ff20;
+}
+.secondary { background:var(--panel2); color:white; border-color:var(--border); }
+.small { padding:7px 10px; }
+
+.privacy-note {
+  color:var(--muted); font-size:10px; margin:12px 0 0;
+  line-height:1.7;
+}
+.result-heading {
+  display:flex; justify-content:space-between;
+  align-items:center; gap:12px;
+}
+.status { color:var(--green); font-size:11px; }
+.empty {
+  min-height:310px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  padding:25px; border:1px dashed #3a365c;
+  border-radius:16px; background:#ffffff03;
+}
+.empty-icon {
+  width:65px; height:65px; display:grid; place-items:center;
+  border-radius:20px; background:#9565ff18;
+  font-size:32px; color:#c1a7ff; margin-bottom:15px;
+}
+.empty strong { font-size:16px; }
+.empty p { color:var(--muted); max-width:300px; font-size:12px; }
+
+#resultsArea { display:flex; flex-direction:column; gap:13px; margin-top:15px; }
+.output {
+  background:#151529; border:1px solid var(--border);
+  border-radius:15px; padding:17px;
+}
+.output-top {
+  display:flex; justify-content:space-between;
+  align-items:center; gap:10px; margin-bottom:12px;
+}
+.output h3 { margin:0; font-size:13px; }
+.badge {
+  color:#d3baff; background:#9565ff1c;
+  padding:4px 8px; border-radius:6px;
+  font-size:9px; letter-spacing:.5px;
+}
+.output-text {
+  white-space:pre-wrap; overflow-wrap:anywhere;
+  font-size:13px; color:#e5e3f5;
+}
+.output-bottom {
+  display:flex; justify-content:flex-end;
+  margin-top:13px; gap:8px;
+}
+.results-actions { display:flex; gap:9px; flex-wrap:wrap; }
+.results-actions .btn { flex:1; }
+
+footer {
+  margin-top:35px; padding:22px 0 8px;
+  text-align:center; color:var(--muted);
+  font-size:11px; border-top:1px solid var(--border);
+}
+footer strong { color:#d4baff; }
+
+.toast {
+  position:fixed; bottom:22px; left:50%;
+  transform:translateX(-50%); z-index:10;
+  padding:11px 17px; background:#24223e;
+  border:1px solid #4b426d; border-radius:10px;
+  font-size:12px; opacity:0; pointer-events:none;
+  transition:opacity .2s;
+}
+.toast.show { opacity:1; }
+
+@media(max-width:760px) {
+  .container { padding:15px; }
+  .layout { grid-template-columns:1fr; }
+  .hero { padding:36px 0 28px; }
+  .card { padding:17px; }
+  .header-tag { font-size:9px; padding:6px 8px; }
+  .brand-name { font-size:20px; }
+  h1 { letter-spacing:-1.2px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <header>
+    <div class="brand">
+      <div class="logo">✦</div>
+      <div>
+        <div class="brand-name">Adly<span class="gradient">AI</span></div>
+        <div class="byline">AI CONTENT STUDIO · by Adly</div>
+      </div>
+    </div>
+    <div class="header-tag">✦ CREATIVE WORKSPACE</div>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow">YOUR IDEAS, YOUR NEXT BIG THING</span>
+    <h1>Konten keren dimulai<br>dari <span class="gradient">satu ide.</span></h1>
+    <p>
+      Asisten kreatif untuk membantu menyiapkan ide konten,
+      hook, caption, hashtag, dan naskah media sosial.
+    </p>
+    <div class="features">
+      <span class="feature">✦ Ide Konten</span>
+      <span class="feature">↗ Hook Menarik</span>
+      <span class="feature">✎ Caption</span>
+      <span class="feature"># Hashtag</span>
+    </div>
+  </section>
+
+  <main class="layout">
+    <section class="card">
+      <h2 class="card-title">✦ Content Generator</h2>
+      <p class="sub">Atur kebutuhan kontenmu di sini.</p>
+
+      <form id="form">
+        <div class="field">
+          <label for="topic">Topik / Nama Produk *</label>
+          <input id="topic" maxlength="180"
+            placeholder="Contoh: blender mini portable" required>
+        </div>
+
+        <div class="field">
+          <label for="platform">Platform Media Sosial</label>
+          <select id="platform">
+            <option>TikTok</option>
+            <option>Instagram</option>
+            <option>Threads</option>
+            <option>Facebook</option>
+            <option>YouTube</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="type">Jenis Konten</label>
+          <select id="type">
+            <option value="Paket Lengkap">Paket Lengkap</option>
+            <option value="Ide Konten">Ide Konten</option>
+            <option value="Hook">Hook Pembuka</option>
+            <option value="Caption">Caption Promosi</option>
+            <option value="Hashtag">Hashtag</option>
+            <option value="Naskah Video">Naskah Video</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="audience">Target Audiens</label>
+          <input id="audience" maxlength="120"
+            placeholder="Contoh: ibu rumah tangga">
+        </div>
+
+        <div class="field">
+          <label for="style">Gaya Bahasa</label>
+          <select id="style">
+            <option value="Santai">Santai & Natural</option>
+            <option value="Lucu">Lucu & Menghibur</option>
+            <option value="Profesional">Profesional</option>
+            <option value="Persuasif">Persuasif & Menjual</option>
+            <option value="Storytelling">Storytelling</option>
+            <option value="Emosional">Emosional</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="goal">Tujuan Konten</label>
+          <select id="goal">
+            <option value="Interaksi">Meningkatkan Interaksi</option>
+            <option value="Penjualan">Mendapatkan Pesanan</option>
+            <option value="Audiens">Membangun Audiens</option>
+            <option value="Profil">Meningkatkan Kunjungan Profil</option>
+          </select>
+        </div>
+
+        <button class="btn primary" id="generate" type="submit">
+          ✦ Buat Konten Sekarang
+        </button>
+        <p class="privacy-note">
+          Versi demo lokal. Tidak memerlukan login atau API key.
+          Hasil dibuat dari template, bukan model AI sungguhan.
+        </p>
+      </form>
+    </section>
+
+    <section>
+      <div class="card">
+        <div class="result-heading">
+          <div>
+            <h2 class="card-title">Hasil Konten</h2>
+            <p class="sub" style="margin:4px 0 0">
+              Kontenmu akan muncul di bawah ini.
+            </p>
+          </div>
+          <span class="status" id="status">● Siap</span>
+        </div>
+      </div>
+
+      <div id="resultsArea" aria-live="polite">
+        <div class="empty">
+          <div class="empty-icon">✧</div>
+          <strong>Mulai kreasikan idemu</strong>
+          <p>
+            Masukkan nama produk atau topik, pilih jenis konten,
+            lalu klik tombol buat konten.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with ✦ by <strong>Adly</strong> ·
+    AdlyAI © <span id="year"></span>
+    <br>Creative tools for your next idea.
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+$("year").textContent = new Date().getFullYear();
+
+let currentResults = [];
+let variation = 0;
+
+function hashText(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = (hash * 31 + text.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+function pick(list, seed) {
+  return list[Math.abs(seed) % list.length];
+}
+
+function buildContent(data) {
+  const {topic, platform, type, audience, style, goal} = data;
+  const seed = hashText(topic + platform + style + goal) + variation;
+
+  const hooks = [
+    `Lagi cari tahu soal ${topic}? Simak ini dulu!`,
+    `Satu hal tentang ${topic} yang menarik untuk dibahas.`,
+    `Jangan lewatkan ide ini kalau kamu tertarik dengan ${topic}!`,
+    `Punya masalah seputar ${topic}? Yuk, bahas bersama.`,
+    `Simpan ide ini! Kita bahas ${topic} dengan cara sederhana.`,
+    `Siapa yang juga penasaran dengan ${topic}?`,
+    `Yuk, kenalan lebih dekat dengan ${topic}!`,
+    `Ini dia ide konten ${topic} yang bisa kamu coba.`
+  ];
+
+  const ideas = [
+    `5 hal menarik tentang ${topic}`,
+    `Kesalahan umum saat mengenal ${topic}`,
+    `Tips pemula seputar ${topic}`,
+    `Mitos dan fakta tentang ${topic}`,
+    `Hal yang perlu diketahui sebelum memilih ${topic}`,
+    `Panduan sederhana memahami ${topic}`,
+    `Pertanyaan yang sering muncul tentang ${topic}`,
+    `Cara membahas ${topic} dengan menarik`
+  ];
+
+  const styleText = {
+    Santai: "Gunakan bahasa sehari-hari yang ringan dan terasa natural.",
+    Lucu: "Sisipkan humor ringan yang relevan dan tidak berlebihan.",
+    Profesional: "Gunakan bahasa yang jelas, informatif, dan profesional.",
+    Persuasif: "Fokus pada manfaat, alasan memilih, dan ajakan yang jelas.",
+    Storytelling: "Awali dengan situasi yang dekat dengan audiens, lalu kembangkan ceritanya.",
+    Emosional: "Bangun kedekatan melalui pengalaman dan perasaan yang relevan."
+  };
+
+  const ctas = {
+    Interaksi: "Bagaimana menurutmu? Ceritakan pendapatmu di komentar!",
+    Penjualan: "Tertarik? Hubungi penjual untuk informasi produk dan pemesanan.",
+    Audiens: "Follow akun ini untuk mendapatkan ide dan informasi lainnya.",
+    Profil: "Kunjungi profil untuk melihat konten dan informasi lainnya."
+  };
+
+  const hook = pick(hooks, seed);
+  const ideaList = Array.from({length:5}, (_, i) =>
+    `${i + 1}. ${pick(ideas, seed + i * 3)}`
+  ).join("\n");
+
+  const cleanTopic = topic.trim()
+    .split(/\s+/)
+    .map(word => word.replace(/[^\p{L}\p{N}_]/gu, ""))
+    .filter(Boolean)
+    .join("");
+
+  const topicTag = cleanTopic
+    ? "#" + cleanTopic
+    : "#Konten";
+
+  const tags = [
+    topicTag,
+    "#IdeKonten",
+    "#Tips",
+    "#" + platform.replace(/\s/g, ""),
+    "#KreatorDigital"
+  ].join(" ");
+
+  const target = audience || "orang yang tertarik dengan topik ini";
+  const caption =
+    `${hook}\n\n` +
+    `${pick(ideas, seed + 1)}.\n\n` +
+    `Konten ini ditujukan untuk ${target}. ` +
+    `${styleText[style]}\n\n` +
+    `${ctas[goal]}\n\n${tags}`;
+
+  const script =
+    `HOOK (0–3 detik)\n${hook}\n\n` +
+    `ISI KONTEN\n` +
+    `Kenalkan ${topic} secara singkat. ` +
+    `Bahas satu informasi utama, jelaskan manfaat yang relevan, ` +
+    `dan berikan contoh yang mudah dipahami oleh ${target}.\n\n` +
+    `PENUTUP\n${ctas[goal]}\n\n` +
+    `Platform: ${platform}\nGaya: ${style}`;
+
+  const outputs = {
+    "Ide Konten": [["5 IDE KONTEN", ideaList]],
+    "Hook": [["PILIHAN HOOK", hooks.map((x, i) => `${i + 1}. ${x}`).join("\n")]],
+    "Caption": [["CAPTION SIAP EDIT", caption]],
+    "Hashtag": [["HASHTAG", tags + " #Inspirasi #KontenKreator"]],
+    "Naskah Video": [["NASKAH VIDEO", script]],
+    "Paket Lengkap": [
+      ["HOOK PEMBUKA", hook],
+      ["IDE KONTEN", ideaList],
+      ["CAPTION", caption],
+      ["NASKAH VIDEO", script],
+      ["HASHTAG", tags + " #Inspirasi #KontenKreator"]
+    ]
+  };
+
+  return outputs[type] || outputs["Paket Lengkap"];
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+function notify(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function renderResults(results) {
+  currentResults = results;
+  const area = $("resultsArea");
+  area.replaceChildren();
+
+  results.forEach(([title, content], index) => {
+    const card = document.createElement("article");
+    card.className = "output";
+    card.innerHTML = `
+      <div class="output-top">
+        <h3>${escapeHTML(title)}</h3>
+        <span class="badge">ADLYAI STUDIO</span>
+      </div>
+      <div class="output-text">${escapeHTML(content)}</div>
+      <div class="output-bottom">
+        <button type="button" class="btn secondary small copy"
+          data-index="${index}">▢ Salin</button>
+      </div>`;
+    area.appendChild(card);
+  });
+
+  const actions = document.createElement("div");
+  actions.className = "results-actions";
+  actions.innerHTML = `
+    <button class="btn secondary" id="regenerate" type="button">
+      ↻ Buat Variasi
+    </button>
+    <button class="btn secondary" id="copyAll" type="button">
+      ▢ Salin Semua
+    </button>`;
+  area.appendChild(actions);
+
+  $("regenerate").addEventListener("click", () => {
+    variation++;
+    $("form").requestSubmit();
+  });
+
+  $("copyAll").addEventListener("click", () => {
+    copyText(currentResults.map(([title, content]) =>
+      title + "\n" + content
+    ).join("\n\n----------------\n\n"));
+  });
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    notify("Berhasil disalin!");
+  } catch {
+    const box = document.createElement("textarea");
+    box.value = text;
+    box.style.position = "fixed";
+    box.style.opacity = "0";
+    document.body.appendChild(box);
+    box.select();
+
+    let success = false;
+    try { success = document.execCommand("copy"); } catch {}
+    box.remove();
+
+    notify(success ? "Berhasil disalin!" : "Tidak dapat menyalin teks.");
+  }
+}
+
+$("resultsArea").addEventListener("click", event => {
+  const button = event.target.closest(".copy");
+  if (!button) return;
+
+  const item = currentResults[Number(button.dataset.index)];
+  if (item) copyText(item[1]);
+});
+
+$("form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const topic = $("topic").value.trim();
+  if (!topic) {
+    $("topic").focus();
+    notify("Masukkan topik terlebih dahulu.");
+    return;
+  }
+
+  const button = $("generate");
+  button.disabled = true;
+  button.textContent = "Sedang membuat konten...";
+  $("status").textContent = "● Memproses";
+
+  const data = {
+    topic,
+    platform: $("platform").value,
+    type: $("type").value,
+    audience: $("audience").value.trim(),
+    style: $("style").value,
+    goal: $("goal").value
+  };
+
+  // Simulasi proses demo lokal, bukan pemanggilan AI sungguhan.
+  setTimeout(() => {
+    renderResults(buildContent(data));
+    $("status").textContent = "● Selesai";
+    button.disabled = false;
+    button.innerHTML = "✦ Buat Konten Sekarang";
+  }, 300);
+});
+</script>
+</body>
+</html>
